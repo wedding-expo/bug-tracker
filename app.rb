@@ -34,3 +34,18 @@ end
 get '/dashboard' do
 	erb :dashboard
 end
+
+#bugs
+get '/bugs' do
+		@bugs = redis.smembers('bug:keys').map { |k| redis.hgetall "bug:#{k}" }
+	erb :bugs
+end
+
+post '/bugs' do
+	json = JSON.parse(request.body.read)
+	title = json['bug']['title']
+	type = json['bug']['type']
+	key = redis.incr 'bug:max'
+	redis.hmset "bug:#{key}", :title, title, :type, type
+	redis.sadd 'bug:keys', key
+end

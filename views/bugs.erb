@@ -5,7 +5,9 @@
 		</div>
 	</div>
 	<div class="row">
-		<h1>Dashboard</h1>
-		<a href="/bugs">Bug List</a>
+		<h1>Bugs</h1>
+		<% @bugs.each do |bug| %>
+			<a href="/bugs"><%= bug['title'] %> (<%= bug['type'] %>)</a><br>
+		<% end %>
 	</div>
 </div>
