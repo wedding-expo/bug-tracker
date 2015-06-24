@@ -28,8 +28,7 @@ post '/logout' do
 	redirect to('/')
 end
 
-# dashboard
-before '/dashboard' do
+before /\/.+/ do
 	unless session.has_key? 'token' then redirect to('/') end
 end
 
