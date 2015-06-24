@@ -6,6 +6,7 @@ require 'http'
 enable :sessions
 redis = Redis.new
 
+# login
 get '/' do
 	if session.has_key? 'token' then redirect to('/dashboard')
 	else erb :login, layout: nil end
@@ -27,6 +28,7 @@ post '/logout' do
 	redirect to('/')
 end
 
+# dashboard
 before '/dashboard' do
 	unless session.has_key? 'token' then redirect to('/') end
 end
@@ -35,17 +37,19 @@ get '/dashboard' do
 	erb :dashboard
 end
 
-#bugs
+# bugs
 get '/bugs' do
-		@bugs = redis.smembers('bug:keys').map { |k| redis.hgetall "bug:#{k}" }
+	@bugs = redis.smembers('bug:keys').map { |k| redis.hgetall "bug:#{k}" }
 	erb :bugs
 end
 
+get '/bugs/new' do
+	erb :new_bug
+end
+
 post '/bugs' do
-	json = JSON.parse(request.body.read)
-	title = json['bug']['title']
-	type = json['bug']['type']
 	key = redis.incr 'bug:max'
-	redis.hmset "bug:#{key}", :title, title, :type, type
+	redis.hmset "bug:#{key}", :title, params['title'], :type, params['type']
 	redis.sadd 'bug:keys', key
+	redirect to('/bugs')
 end

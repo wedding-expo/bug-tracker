@@ -1,0 +1,22 @@
+<div class="container">
+	<div class="row">
+		<h1>New Bug</h1>
+		<form action="/bugs" method="post">
+			<div class="group">
+				<label for="title">Title</label>
+				<input type="text" name="title" />
+			</div>
+			<div class="group">
+				<label for="type">Type</label>
+				<select name="type">
+					<option value="bug">Bug</option>
+					<option value="serious_bug">Serious Bug</option>
+					<option value="feature">Feature Request</option>
+				</select>
+			</div>
+			<div class="group">
+				<button type="submit">Submit</button>
+			</div>
+		</form>
+	</div>
+</div>
