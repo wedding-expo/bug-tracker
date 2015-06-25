@@ -4,7 +4,7 @@
 		<a href="/bugs/new">New Bug</a>
 		<br><br>
 		<% @bugs.each do |bug| %>
-			<a href="/bugs"><%= bug['title'] %> (<%= bug['type'] %>)</a><br>
+			<a href="/bugs/<%= bug['id'] %>"><%= bug['title'] %> (<%= bug['type'] %>)</a><br>
 		<% end %>
 	</div>
 </div>

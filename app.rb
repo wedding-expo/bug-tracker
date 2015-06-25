@@ -38,8 +38,13 @@ end
 
 # bugs
 get '/bugs' do
-	@bugs = redis.smembers('bug:keys').map { |k| redis.hgetall "bug:#{k}" }
+	@bugs = redis.smembers('bug:keys').map { |k| redis.hgetall("bug:#{k}").merge('id' => k) }
 	erb :bugs
+end
+
+get %r{^/bugs/([0-9]+)/?$} do |id|
+	@bug = redis.hgetall("bug:#{id}").merge('id' => id)
+	erb :bug
 end
 
 get '/bugs/new' do
