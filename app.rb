@@ -7,32 +7,32 @@ enable :sessions
 redis = Redis.new
 
 # login
-get '/' do
-	if session.has_key? 'token' then redirect to('/dashboard')
+get '/login' do
+	if session.has_key? 'token' then redirect to('/')
 	else erb :login, layout: nil end
 end
 
-post '/' do
+post '/login' do
 	response = HTTP.post('https://admin.winecountrybride.com/sessions.json', json: {email: params[:email], password: params[:password]})
 	if response.status.code == 200
 		json = JSON.parse response.body
 		session['token'] = json['token']
-		redirect to('/dashboard')
-	else
 		redirect to('/')
+	else
+		redirect to('/login')
 	end
 end
 
 post '/logout' do
 	session.clear
-	redirect to('/')
+	redirect to('/login')
 end
 
-before /\/.+/ do
-	unless session.has_key? 'token' then redirect to('/') end
+before %r{^/(bugs(/.*)?)?$} do
+	unless session.has_key? 'token' then redirect to('/login') end
 end
 
-get '/dashboard' do
+get '/' do
 	erb :dashboard
 end
 
