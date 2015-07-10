@@ -2,8 +2,14 @@ require 'sinatra'
 require 'redis'
 require 'json'
 require 'http'
+require 'rack/ssl-enforcer'
 
-enable :sessions
+set :session_secret, ENV['SECRET']
+use Rack::SslEnforcer
+use Rack::Session::Cookie, :key => '_rack_session',
+                           :path => '/',
+                           :expire_after => 2592000, # In seconds
+                           :secret => settings.session_secret
 redis = Redis.new
 
 # login
