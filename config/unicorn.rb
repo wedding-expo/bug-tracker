@@ -1,8 +1,9 @@
-worker_processes 4
+worker_processes 8
 timeout 15
 preload_app true
 
 listen '/srv/tmp/sockets/unicorn.sock', :backlog => 2048
+pid '/srv/tmp/pids/unicorn.pid'
 
 before_fork do |server, worker|
   Signal.trap 'TERM' do
